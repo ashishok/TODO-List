@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="index.css">
+    <title>To-Do List</title>
+</head>
+<body>   
+    
+
+<div class="one">
+    <h1>To-Do List </h1><br>
+    <input type="text" placeholder=" Write Task">
+    <button > &#10010;</button>
+</div>
+
+<ul class="list">
+     </ul>
+
+
+<div class="footer">
+    <span class="num"></span>
+    <button>Clear All</button>
+</div>
+
+<script>
+    const input = document.querySelector(".one input");
+const Btn = document.querySelector(".one button");
+const List = document.querySelector(".list");
+const deleteAllBtn = document.querySelector(".footer button");
+
+
+ 
+showTask();
+ 
+Btn.onclick = () => {
+    let userData = input.value;
+        let getLocalStorage = localStorage.getItem("New Todo");
+    if (getLocalStorage == null) {
+        listArr = []; 
+    } else {
+        listArr = JSON.parse(getLocalStorage);
+    }
+    listArr.push(userData); 
+
+    localStorage.setItem("New Todo", JSON.stringify(listArr)); 
+    showTask();
+    Btn.classList.remove("active");
+}
+
+//input task
+function showTask() {
+    let getLocalStorage = localStorage.getItem("New Todo");
+    if (getLocalStorage == null) {
+        listArr = []; 
+    } else {
+        listArr = JSON.parse(getLocalStorage);
+    }
+    const Number = document.querySelector(".num");
+    Number.textContent = listArr.length; 
+    if (listArr.length > 0) {
+        deleteAllBtn.classList.add("active");
+    } else {
+        deleteAllBtn.classList.remove("active");
+    }
+    let newLiTag = '';
+    listArr.forEach((element, index) => {
+        newLiTag += `<li> ${element} <span onclick="deleteTask(${index})";><i class="fas fa-trash"></i></span></li>`;
+    });
+    List.innerHTML = newLiTag;
+    input.value = "";
+}
+
+//delete task 
+function deleteTask(index) {
+    let getLocalStorage = localStorage.getItem("New Todo");
+    listArr = JSON.parse(getLocalStorage);
+    listArr.splice(index, 1);
+    localStorage.setItem("New Todo", JSON.stringify(listArr)); 
+    showTask();
+
+}
+
+deleteAllBtn.onclick = () => {
+    listArr = [];
+    localStorage.setItem("New Todo", JSON.stringify(listArr));
+    showTask();
+}
+</script> 
+
+</body>
+</html>
